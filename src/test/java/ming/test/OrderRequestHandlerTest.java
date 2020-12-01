@@ -19,6 +19,8 @@ import static org.mockito.Mockito.when;
 
 class OrderRequestHandlerTest {
 
+    String body = "this is my test content";
+
     @Test
     void handleRequest_dataInserted() {
         // using h2 in memory db
@@ -28,34 +30,25 @@ class OrderRequestHandlerTest {
         when(env.getDbUsername()).thenReturn("username");
         when(env.getDbPassword()).thenReturn("password");
 
-        Map<String,Object> event = new HashMap();
-        event.put("content", "this is my test content");
-
         Context context = new TestContext();
         OrderRequestHandler handler = new OrderRequestHandler(env);
-        int result = handler.handleRequest(event, context);
+        int result = Integer.parseInt(handler.handleBody(body, context));
         assertTrue(result>0);
     }
 
     @Test
     void handleRequest_noConnection() {
-        Map<String,Object> event = new HashMap();
-        event.put("content", "this is my test content");
-
         Context context = new TestContext();
         OrderRequestHandler handler = new OrderRequestHandler();
-        int result = handler.handleRequest(event, context);
+        int result = Integer.parseInt(handler.handleBody(body, context));
         assertEquals(result, ErrorCode.DB_CONNECT_FAILED.getCode());
     }
 
     @Test
     void handleRequest_noEnv() {
-        Map<String,Object> event = new HashMap();
-        event.put("content", "this is my test content");
-
         Context context = new TestContext();
         OrderRequestHandler handler = new OrderRequestHandler(new Environment());
-        int result = handler.handleRequest(event, context);
+        int result = Integer.parseInt(handler.handleBody(body, context));
         assertEquals(result, ErrorCode.DB_CONNECT_FAILED.getCode());
     }
 
@@ -66,12 +59,9 @@ class OrderRequestHandlerTest {
         when(env.getDbUsername()).thenReturn("username");
         when(env.getDbPassword()).thenReturn("password");
 
-        Map<String,Object> event = new HashMap();
-        event.put("content", "this is my test content");
-
         Context context = new TestContext();
         OrderRequestHandler handler = new OrderRequestHandler(env);
-        int result = handler.handleRequest(event, context);
+        int result = Integer.parseInt(handler.handleBody(body, context));
         assertEquals(result, ErrorCode.DB_CONNECT_FAILED.getCode());
     }
 
@@ -85,11 +75,9 @@ class OrderRequestHandlerTest {
         when(env.getDbUsername()).thenReturn("username");
         when(env.getDbPassword()).thenReturn("password");
 
-        Map<String,Object> event = new HashMap();
-
         Context context = new TestContext();
         OrderRequestHandler handler = new OrderRequestHandler(env);
-        int result = handler.handleRequest(event, context);
+        int result = Integer.parseInt(handler.handleBody(null, context));
         assertEquals(result, ErrorCode.MISSING_CONTENT.getCode());
     }
 
@@ -101,12 +89,10 @@ class OrderRequestHandlerTest {
         when(env.getDbUrl()).thenReturn("jdbc:h2:mem:test;INIT=runscript from '"+initSqlPath+"'"); // drop table
         when(env.getDbUsername()).thenReturn("username");
         when(env.getDbPassword()).thenReturn("password");
-        Map<String,Object> event = new HashMap();
-        event.put("content", "this is my test content");
 
         Context context = new TestContext();
         OrderRequestHandler handler = new OrderRequestHandler(env);
-        int result = handler.handleRequest(event, context);
+        int result = Integer.parseInt(handler.handleBody(body, context));
         assertEquals(result, ErrorCode.DB_INSERT_FAILED.getCode());
     }
 
@@ -117,12 +103,9 @@ class OrderRequestHandlerTest {
 //     DB_PASSWORD=<DB password>
 //    @Test
     void manuallyTest_handleRequest() {
-        Map<String,Object> event = new HashMap();
-        event.put("content", "this is my test content");
-
         Context context = new TestContext();
         OrderRequestHandler handler = new OrderRequestHandler();
-        int result = handler.handleRequest(event, context);
+        int result = Integer.parseInt(handler.handleBody(body, context));
         assertTrue(result>0);
     }
 }
