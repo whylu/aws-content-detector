@@ -15,7 +15,7 @@ public class OrderRequestHandler implements RequestHandler<Map<String,Object>, I
     private Connection connection;
 
     public OrderRequestHandler() {
-        createDBConnection();
+        this.connection = createDBConnection();
     }
     public OrderRequestHandler(Environment env) {
         this.env = env;
