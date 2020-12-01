@@ -1,0 +1,7 @@
+{
+  "ReceiverFunction": {
+    "DB_URL": "jdbc:postgresql://<host>:<port>/<database:postgres>",
+    "DB_USERNAME": "<db_username>",
+    "DB_PASSWORD": "<password>"
+  }
+}
