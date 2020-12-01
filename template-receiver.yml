@@ -30,3 +30,12 @@ Resources:
           DB_URL: jdbc:postgresql://<host>:<port>/<database:postgres>
           DB_USERNAME: <db_username>
           DB_PASSWORD: <password>
+
+      VpcConfig:
+        SecurityGroupIds:
+          SecurityGroupIds:
+            - sg-XXXXXXXX
+          SubnetIds:
+            - subnet-XXXXXXXX
+            - subnet-XXXXXXXX
+            - subnet-XXXXXXXX
