@@ -109,4 +109,20 @@ class OrderRequestHandlerTest {
         int result = handler.handleRequest(event, context);
         assertEquals(result, ErrorCode.DB_INSERT_FAILED.getCode());
     }
+
+
+//     manually test, need setting following environment variables:
+//     DB_URL=<url to DB>;
+//     DB_USERNAME=<DB username>;
+//     DB_PASSWORD=<DB password>
+//    @Test
+    void manuallyTest_handleRequest() {
+        Map<String,Object> event = new HashMap();
+        event.put("content", "this is my test content");
+
+        Context context = new TestContext();
+        OrderRequestHandler handler = new OrderRequestHandler();
+        int result = handler.handleRequest(event, context);
+        assertTrue(result>0);
+    }
 }

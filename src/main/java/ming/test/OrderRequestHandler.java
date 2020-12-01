@@ -14,13 +14,18 @@ public class OrderRequestHandler implements RequestHandler<Map<String,Object>, I
     private Environment env;
     private Connection connection;
 
-    public OrderRequestHandler() {}
+    public OrderRequestHandler() {
+        createDBConnection();
+    }
     public OrderRequestHandler(Environment env) {
         this.env = env;
         this.connection = createDBConnection();
     }
 
     private Connection createDBConnection() {
+        if(env==null) {
+            env = new Environment();
+        }
         String dbUrl = env.getDbUrl();
         String username = env.getDbUsername();
         String password = env.getDbPassword();
