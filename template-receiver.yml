@@ -33,9 +33,8 @@ Resources:
 
       VpcConfig:
         SecurityGroupIds:
-          SecurityGroupIds:
-            - sg-XXXXXXXX
-          SubnetIds:
-            - subnet-XXXXXXXX
-            - subnet-XXXXXXXX
-            - subnet-XXXXXXXX
+          - sg-XXXXXXXX
+        SubnetIds:
+          - subnet-XXXXXXXX
+          - subnet-XXXXXXXX
+          - subnet-XXXXXXXX
