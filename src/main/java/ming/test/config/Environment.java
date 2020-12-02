@@ -13,4 +13,8 @@ public class Environment {
         return System.getenv("DB_PASSWORD");
     }
 
+    public String getDetectStrategy() {
+        return System.getenv("DETECT_STRATEGY");
+    }
+
 }

@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 public class OrderRequestHandler extends ProxyHandler {
     private static Logger logger = LoggerFactory.getLogger(OrderRequestHandler.class);
-    private static final String SQL_INSERT = "INSERT INTO submit_order (content, submit_time) VALUES (?, extract(epoch from now() at time zone 'UTC')::int)";
     private OrderRepository orderRepository;
 
     public OrderRequestHandler() {

@@ -5,6 +5,9 @@ public enum ErrorCode {
     DB_CONNECT_FAILED(-2, "-2"),
     DB_INSERT_FAILED(-3, "-3"),
 
+    ROW_ID_INVALID(-4, "-4"),
+    ORDER_NOT_FOUND(-5, "-5"),
+    DETECTOR_NOT_DEFINED(-6, "-6")
     ;
 
     private final int code;
