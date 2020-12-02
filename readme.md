@@ -41,6 +41,7 @@ sam local invoke \
   -e event-submit-order.json \
   --template template-receiver-local.yml \
   --env-vars sam-env.json \
+  ReceiverFunction
 ```
 sam-env.json will inject to template-receiver.yml
 
@@ -73,4 +74,14 @@ test receiver endpoint
 ```sh
 curl -X POST --data 'this is raw data' <api-url>
 ```
+
+
+by current step, we have used this service in aws: 
+- Lambda
+- RDS
+- API gateway
+- IAM
+- CloudFormation
+- VPC
+- CloudWatch
 
