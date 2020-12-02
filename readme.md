@@ -77,11 +77,12 @@ curl -X POST --data 'this is raw data' <api-url>
 
 
 by current step, we have used this service in aws: 
-- Lambda
-- RDS
-- API gateway
-- IAM
-- CloudFormation
-- VPC
-- CloudWatch
+- Lambda: java lambda function 
+- RDS: lambda function access DB
+- API gateway: rest API endpoint to lambda
+- IAM: permission of roles
+- S3: to upload lambda code
+- CloudFormation: deploy lambda function
+- VPC: network control between lambda and RDS
+- CloudWatch: for logs
 
