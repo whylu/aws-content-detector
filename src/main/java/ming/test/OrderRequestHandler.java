@@ -2,10 +2,10 @@ package ming.test;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import ming.test.config.Environment;
 import ming.test.model.ErrorCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.Collections;
@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OrderRequestHandler extends ProxyHandler {
+    private static Logger logger = LoggerFactory.getLogger(OrderRequestHandler.class);
     private static final String SQL_INSERT = "INSERT INTO submit_order (content, submit_time) VALUES (?, extract(epoch from now() at time zone 'UTC')::int)";
     private Environment env;
     private Connection connection;
@@ -47,13 +48,12 @@ public class OrderRequestHandler extends ProxyHandler {
     @Override
     protected String handleBody(String body, Context context) {
 
-        LambdaLogger logger = context.getLogger();
         if(connection==null) {
-            logger.log("there is no connection, no more operation");
+            logger.warn("there is no connection, no more operation");
             return ErrorCode.DB_CONNECT_FAILED.getCodeStr();
         }
         if(body==null || body.isEmpty()) {
-            logger.log("MISSING_CONTENT");
+            logger.warn("MISSING_CONTENT");
             return ErrorCode.MISSING_CONTENT.getCodeStr();
         }
 
@@ -68,7 +68,7 @@ public class OrderRequestHandler extends ProxyHandler {
                 return String.valueOf(rowId);
             }
         } catch (Exception ex) {
-            logger.log("failed to insert db" + ex.getMessage());
+            logger.warn("failed to insert db" + ex.getMessage());
             ex.printStackTrace();
         }
         return ErrorCode.DB_INSERT_FAILED.getCodeStr(); // failed
