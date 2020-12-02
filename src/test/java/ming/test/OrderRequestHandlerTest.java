@@ -3,15 +3,7 @@ package ming.test;
 import com.amazonaws.services.lambda.runtime.Context;
 import ming.test.config.Environment;
 import ming.test.model.ErrorCode;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -84,7 +76,7 @@ class OrderRequestHandlerTest {
 
     @Test
     void handleRequest_insertFailed() {
-        String initSqlPath = OrderRequestHandlerTest.class.getResource("/h2/drop_all_objects.sql").getPath();
+        String initSqlPath = OrderRequestHandlerTest.class.getResource("/h2/drop_submit_order.sql").getPath();
         Environment env = mock(Environment.class);
         when(env.getDbUrl()).thenReturn("jdbc:h2:mem:test;INIT=runscript from '"+initSqlPath+"'"); // drop table
         when(env.getDbUsername()).thenReturn("username");
