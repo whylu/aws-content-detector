@@ -5,7 +5,11 @@ import ming.test.model.ErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class OrderRepository {
     private static Logger logger = LoggerFactory.getLogger(OrderRepository.class);

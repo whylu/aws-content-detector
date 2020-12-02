@@ -1,8 +1,8 @@
 package ming.test;
 
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.CognitoIdentity;
 import com.amazonaws.services.lambda.runtime.ClientContext;
+import com.amazonaws.services.lambda.runtime.CognitoIdentity;
+import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
 public class TestContext implements Context{
