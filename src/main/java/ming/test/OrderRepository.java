@@ -2,6 +2,7 @@ package ming.test;
 
 import ming.test.config.Environment;
 import ming.test.model.ErrorCode;
+import ming.test.model.SubmitOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,17 +50,17 @@ public class OrderRepository {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, body);
             int row = preparedStatement.executeUpdate();
-            if(row==1) {
-                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-                generatedKeys.next();
-                int rowId = generatedKeys.getInt(1);
-                return rowId;
-            }
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            generatedKeys.next();
+            int rowId = generatedKeys.getInt(1);
+            return rowId;
         } catch (Exception ex) {
             logger.warn("failed to insert db", ex);
-            ex.printStackTrace();
         }
         return ErrorCode.DB_INSERT_FAILED.getCode();
     }
 
+    public SubmitOrder getOrder(int rowId) {
+        return null;
+    }
 }
