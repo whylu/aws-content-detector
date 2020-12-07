@@ -5,30 +5,31 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent;
 import ming.test.config.Environment;
 import ming.test.detector.Detector;
+import ming.test.detector.HelloDetector;
 import ming.test.model.ErrorCode;
 import ming.test.model.SubmitOrder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ming.test.utils.LogUtils;
 
 public class ContentDetectorHandler implements RequestHandler<SNSEvent, String> {
-    private static Logger logger = LoggerFactory.getLogger(ContentDetectorHandler.class);
     private OrderRepository orderRepository;
     private Detector detector;
+    private String strategy;
 
     public ContentDetectorHandler() {
         Environment env = new Environment();
         orderRepository = new OrderRepository(env);
-        detector = Detector.Factory.build(env.getDetectStrategy());
+        strategy = env.getDetectStrategy();
+        detector = Detector.Factory.build(strategy);
     }
 
     @Override
     public String handleRequest(SNSEvent event, Context context) {
         if(this.detector==null) {
-            logger.warn("there is no detector, no more operation");
+            LogUtils.log("there is no detector, no more operation");
             return ErrorCode.DETECTOR_NOT_DEFINED.name();
         }
         if(!orderRepository.isActive()) {
-            logger.warn("there is no connection, no more operation");
+            LogUtils.log("there is no connection, no more operation");
             return ErrorCode.DB_CONNECT_FAILED.name();
         }
 
@@ -36,19 +37,21 @@ public class ContentDetectorHandler implements RequestHandler<SNSEvent, String> 
         try {
             int rowId = Integer.parseInt(message);
             if(rowId<=0) {
-                logger.warn("rowId invalid: {}", rowId);
+                LogUtils.log("rowId invalid: "+ rowId);
                 return ErrorCode.ROW_ID_INVALID.name();
             }
 
             SubmitOrder order = orderRepository.getOrder(rowId);
             if(order==null) {
-                logger.warn("order not found: {}", rowId);
+                LogUtils.log("order not found: "+ rowId);
                 return ErrorCode.ORDER_NOT_FOUND.name();
             }
             boolean isSuspicion = detector.foundSuspicion(order.getContent());
-            return String.valueOf(isSuspicion);
+
+            int historyRowId = orderRepository.createHistory(order.getId(), strategy, isSuspicion);
+            return String.valueOf(historyRowId);
         } catch (NumberFormatException ex) {
-            logger.warn("Expecting input message is an integer, but '{}'", message);
+            LogUtils.log("Expecting input message is an integer, but '"+message+"'");
             return ErrorCode.ROW_ID_INVALID.name();
         }
     }

@@ -3,11 +3,9 @@ package ming.test;
 import com.amazonaws.services.lambda.runtime.Context;
 import ming.test.config.Environment;
 import ming.test.model.ErrorCode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ming.test.utils.LogUtils;
 
 public class OrderRequestHandler extends ProxyHandler {
-    private static Logger logger = LoggerFactory.getLogger(OrderRequestHandler.class);
     private OrderRepository orderRepository;
 
     public OrderRequestHandler() {
@@ -20,13 +18,14 @@ public class OrderRequestHandler extends ProxyHandler {
 
     @Override
     protected String handleBody(String body, Context context) {
+        LogUtils.set(context.getLogger());
 
         if(!orderRepository.isActive()) {
-            logger.warn("there is no connection, no more operation");
+            LogUtils.log("there is no connection, no more operation");
             return ErrorCode.DB_CONNECT_FAILED.getCodeStr();
         }
         if(body==null || body.isEmpty()) {
-            logger.warn("MISSING_CONTENT");
+            LogUtils.log("MISSING_CONTENT");
             return ErrorCode.MISSING_CONTENT.getCodeStr();
         }
 

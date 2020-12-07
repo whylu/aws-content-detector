@@ -85,6 +85,7 @@ class ContentDetectorHandlerTest {
 
         handler.handleRequest(createEvent("100"), new TestContext());
         verify(detector).foundSuspicion(eq("this is my content"));
+        verify(repository).createHistory(eq(100), eq(HelloDetector.class.getName()), eq(false));
     }
 
 
@@ -103,6 +104,9 @@ class ContentDetectorHandlerTest {
             Field field = ContentDetectorHandler.class.getDeclaredField("detector");
             field.setAccessible(true);
             field.set(handler, detector);
+            Field fStrategy = ContentDetectorHandler.class.getDeclaredField("strategy");
+            fStrategy.setAccessible(true);
+            fStrategy.set(handler, HelloDetector.class.getName());
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -117,4 +121,18 @@ class ContentDetectorHandlerTest {
         event.setRecords(Collections.singletonList(snsRecord));
         return event;
     }
+
+
+//     manually test, need setting following environment variables:
+//     DB_URL=<url to DB>;
+//     DB_USERNAME=<DB username>;
+//     DB_PASSWORD=<DB password>
+//     DETECT_STRATEGY=<strategy>
+//    @Test
+    void manuallyTest_handleRequest() {
+        ContentDetectorHandler handler = new ContentDetectorHandler();
+        String result = handler.handleRequest(createEvent("39"), new TestContext());
+        System.out.println(result);
+    }
+
 }

@@ -2,6 +2,7 @@ package ming.test;
 
 import ming.test.config.Environment;
 import ming.test.model.ErrorCode;
+import ming.test.model.SubmitOrder;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
@@ -67,4 +68,35 @@ class OrderRepositoryTest {
         assertThat(result).isEqualTo(ErrorCode.DB_INSERT_FAILED.getCode());
     }
 
+
+    @Test
+    void select_success() {
+        String initSqlPath = OrderRequestHandlerTest.class.getResource("/h2/init.sql").getPath();
+        Environment env = mock(Environment.class);
+        when(env.getDbUrl()).thenReturn("jdbc:h2:mem:test;INIT=runscript from '"+initSqlPath+"'");
+        when(env.getDbUsername()).thenReturn("username");
+        when(env.getDbPassword()).thenReturn("password");
+
+        OrderRepository orderRepository = new OrderRepository(env);
+        int rowId = orderRepository.insertOrder("bobobobody");
+
+        SubmitOrder order = orderRepository.getOrder(rowId);
+        assertThat(order.getId()).isEqualTo(rowId);
+        assertThat(order.getContent()).isEqualTo("bobobobody");
+
+        order = orderRepository.getOrder(-1);
+        assertThat(order).isNull();
+    }
+
+    @Test
+    void createHistory() {
+        String initSqlPath = OrderRequestHandlerTest.class.getResource("/h2/init.sql").getPath();
+        Environment env = mock(Environment.class);
+        when(env.getDbUrl()).thenReturn("jdbc:h2:mem:test;INIT=runscript from '"+initSqlPath+"'");
+        when(env.getDbUsername()).thenReturn("username");
+        when(env.getDbPassword()).thenReturn("password");
+        OrderRepository orderRepository = new OrderRepository(env);
+        int rowId = orderRepository.createHistory(1, "myStrategy", true);
+        assertThat(rowId).isGreaterThan(0);
+    }
 }
