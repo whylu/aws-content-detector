@@ -39,7 +39,7 @@ Resources:
           - subnet-XXXXXXXX
           - subnet-XXXXXXXX
 
-  ContentDetector:
+  HelloContentDetector:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: target/aws-content-detector.jar
@@ -62,6 +62,14 @@ Resources:
           DB_PASSWORD: <password>
           DETECT_STRATEGY: ming.test.detector.HelloDetector
 
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-XXXXXXXX
+        SubnetIds:
+          - subnet-XXXXXXXX
+          - subnet-XXXXXXXX
+          - subnet-XXXXXXXX
+          
       Events:
         SnsEvent:
           Type: SNS

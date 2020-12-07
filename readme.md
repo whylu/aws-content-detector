@@ -89,6 +89,11 @@ by current step, we have used this service in aws:
 
 
 
+
+## Content Detector
+
+### Prepare
+
 ```sql
 
 CREATE TABLE IF NOT EXISTS detect_history (
@@ -103,15 +108,14 @@ create index if not exists idx_order_id on detect_history(order_id);
 ```
 
 
--- Auto-generated SQL script #202012020925
-INSERT INTO public.detect_history (order_id,strategy,found_suspicion)  VALUES (32,'ming.test.detector.HelloDetector',false);
-
-
+### Test
 use sam local invoke
 ```sh
 sam local invoke \
   -e event-sns-new-order.json \
   --template template-receiver-local.yml \
   --env-vars sam-env.json \
-  ContentDetector
+  HelloContentDetector
 ```
+
+
