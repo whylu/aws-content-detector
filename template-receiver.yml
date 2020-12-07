@@ -19,7 +19,7 @@ Resources:
       Tracing: Active
 
       Events:
-        GetResource:
+        SubmitOrderEvent:
           Type: Api
           Properties:
             Path: /
@@ -38,3 +38,31 @@ Resources:
           - subnet-XXXXXXXX
           - subnet-XXXXXXXX
           - subnet-XXXXXXXX
+
+  ContentDetector:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: target/aws-content-detector.jar
+      Handler: ming.test.ContentProducerHandler::handleRequest
+      Runtime: java8
+      Description: Java function
+      MemorySize: 128
+      Timeout: 5
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambdaReadOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+      Tracing: Active
+
+      Environment:
+        Variables:
+          DB_URL: jdbc:postgresql://<host>:<port>/<database:postgres>
+          DB_USERNAME: <db_username>
+          DB_PASSWORD: <password>
+
+      Events:
+        SnsEvent:
+          Type: SNS
+          Properties:
+            Topic: <sns-topic-arn>

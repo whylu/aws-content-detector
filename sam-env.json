@@ -3,5 +3,11 @@
     "DB_URL": "jdbc:postgresql://<host>:<port>/<database:postgres>",
     "DB_USERNAME": "<db_username>",
     "DB_PASSWORD": "<password>"
+  },
+  "ContentDetector": {
+    "DB_URL": "jdbc:postgresql://<host>:<port>/<database:postgres>",
+    "DB_USERNAME": "<db_username>",
+    "DB_PASSWORD": "<password>",
+    "DETECT_STRATEGY": "ming.test.detector.HelloDetector"
   }
 }

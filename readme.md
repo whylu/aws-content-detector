@@ -86,3 +86,32 @@ by current step, we have used this service in aws:
 - VPC: network control between lambda and RDS
 - CloudWatch: for logs
 
+
+
+
+```sql
+
+CREATE TABLE IF NOT EXISTS detect_history (
+  id serial PRIMARY KEY,
+  order_id integer not null, 
+  strategy varchar(512) NOT NULL,
+  found_suspicion boolean default false,
+  process_time integer NOT NULL
+)
+
+create index if not exists idx_order_id on detect_history(order_id);
+```
+
+
+-- Auto-generated SQL script #202012020925
+INSERT INTO public.detect_history (order_id,strategy,found_suspicion)  VALUES (32,'ming.test.detector.HelloDetector',false);
+
+
+use sam local invoke
+```sh
+sam local invoke \
+  -e event-sns-new-order.json \
+  --template template-receiver-local.yml \
+  --env-vars sam-env.json \
+  ContentDetector
+```

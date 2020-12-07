@@ -10,7 +10,7 @@ Resources:
       Runtime: java8
       Description: Java function
       MemorySize: 128
-      Timeout: 5
+      Timeout: 20
       # Function's execution role
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -19,7 +19,7 @@ Resources:
       Tracing: Active
 
       Events:
-        GetResource:
+        SubmitOrderEvent:
           Type: Api
           Properties:
             Path: /
@@ -30,3 +30,32 @@ Resources:
           DB_URL:
           DB_USERNAME:
           DB_PASSWORD:
+
+  ContentDetector:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: target/aws-content-detector.jar
+      Handler: ming.test.ContentDetectorHandler::handleRequest
+      Runtime: java8
+      Description: Java function
+      MemorySize: 128
+      Timeout: 20
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambdaReadOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+      Tracing: Active
+
+      Environment:
+        Variables:
+          DB_URL:
+          DB_USERNAME:
+          DB_PASSWORD:
+          DETECT_STRATEGY:
+
+      Events:
+        SnsEvent:
+          Type: SNS
+          Properties:
+            Topic:
